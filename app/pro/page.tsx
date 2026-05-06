@@ -1,48 +1,38 @@
-import { getSession } from '@/lib/auth'
 import { db } from '@/lib/db'
 import Link from 'next/link'
 
 export default async function ProDashboard() {
-  const session = await getSession()
-
-  const [stats] = await Promise.all([
-    db.query(`SELECT 
-      (SELECT COUNT(*) FROM users WHERE role='client') as total_clientes,
-      (SELECT COUNT(*) FROM dietas) as total_dietas,
-      (SELECT COUNT(*) FROM feedbacks WHERE lido=false) as pendentes
-    `)
-  ])
+  const stats = await db.query(`SELECT 
+    (SELECT COUNT(*) FROM users WHERE role='client') as clientes,
+    (SELECT COUNT(*) FROM dietas) as planos
+  `);
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-10">
+    <div className="min-h-screen bg-[#0c0e12] text-white p-6 md:p-12">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
         <div>
-          <h1 className="text-5xl font-bold text-white tracking-tighter">SPANCERSKI</h1>
-          <p className="text-green-400 text-xl">Painel do Profissional</p>
+          <h1 className="text-5xl font-extrabold tracking-tighter">DASHBOARD</h1>
+          <p className="text-gray-500 font-mono">SISTEMA DE OTIMIZAÇÃO CORPORAL</p>
         </div>
-        <Link href="/pro/novo-cliente" className="bg-green-500 hover:bg-green-600 px-8 py-4 rounded-2xl font-semibold text-black">
-          + Novo Cliente
+        <Link href="/pro/novo-cliente" className="group relative px-8 py-4 bg-primary text-black font-bold rounded-full overflow-hidden transition-all">
+          <span className="relative z-10">+ CADASTRAR ATLETA</span>
+          <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform"></div>
         </Link>
-      </div>
+      </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div className="glass-card p-8 rounded-3xl">
-          <p className="text-gray-400">CLIENTES ATIVOS</p>
-          <p className="text-6xl font-bold text-white mt-4">{stats.rows[0].total_clientes}</p>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white/5 border border-white/5 p-8 rounded-[24px] backdrop-blur-md">
+          <span className="text-primary text-sm font-bold">CLIENTES</span>
+          <h2 className="text-6xl font-bold mt-2">{stats.rows[0].clientes}</h2>
         </div>
-        <div className="glass-card p-8 rounded-3xl">
-          <p className="text-gray-400">DIETAS ENVIADAS</p>
-          <p className="text-6xl font-bold text-white mt-4">{stats.rows[0].total_dietas}</p>
+        <div className="bg-white/5 border border-white/5 p-8 rounded-[24px] backdrop-blur-md">
+          <span className="text-primary text-sm font-bold">PLANOS ATIVOS</span>
+          <h2 className="text-6xl font-bold mt-2">{stats.rows[0].planos}</h2>
         </div>
-        <div className="glass-card p-8 rounded-3xl border border-red-500/30">
-          <p className="text-gray-400">FEEDBACKS PENDENTES</p>
-          <p className="text-6xl font-bold text-red-400 mt-4">{stats.rows[0].pendentes}</p>
+        <div className="md:col-span-2 bg-gradient-to-br from-primary/20 to-transparent border border-primary/20 p-8 rounded-[24px]">
+          <h3 className="text-xl font-bold mb-4 italic">PRÓXIMAS AVALIAÇÕES</h3>
+          <p className="text-gray-400">3 atletas aguardando feedback de progresso IA.</p>
         </div>
-      </div>
-
-      <div className="glass-card rounded-3xl p-8">
-        <h2 className="text-2xl font-semibold mb-6">Clientes Recentes</h2>
-        {/* Tabela será carregada no client component se necessário */}
       </div>
     </div>
   )
