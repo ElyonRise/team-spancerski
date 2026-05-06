@@ -20,8 +20,7 @@ async function extractContent(file: File): Promise<{ html: string; raw: string }
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
     const result = await pdfParse(buffer)
-    const text = result.text || ''
-    return { html: '', raw: text }
+    return { html: '', raw: result.text || '' }
   }
 
   const arrayBuffer = await file.arrayBuffer()
@@ -30,13 +29,11 @@ async function extractContent(file: File): Promise<{ html: string; raw: string }
   return { html: '', raw: text }
 }
 
-// GET - busca dietas do cliente logado
 export async function GET(req: NextRequest) {
   const session = await getSession()
   if (!session) {
     return NextResponse.json({ error: 'Nao autorizado' }, { status: 401 })
   }
-
   try {
     const result = await db.query(
       `SELECT id, nome, conteudo_raw, conteudo_html, kcal, proteina, carboidratos, gorduras, created_at
@@ -50,13 +47,11 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// POST - profissional envia dieta
 export async function POST(req: NextRequest) {
   const session = await getSession()
   if (!session || session.role !== 'pro') {
     return NextResponse.json({ error: 'Nao autorizado' }, { status: 401 })
   }
-
   try {
     const formData = await req.formData()
     const file = formData.get('file') as File
@@ -73,23 +68,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Nao foi possivel extrair texto do arquivo.' }, { status: 400 })
     }
 
-    // Tenta salvar com conteudo_html - se coluna nao existir, salva so o raw
-    try {
-      const result = await db.query(
-        `INSERT INTO dietas (client_id, nome, conteudo_raw, conteudo_html, protocolo, kcal, proteina, carboidratos, gorduras)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
-        [client_id, nome, raw, html, JSON.stringify([]), 0, 0, 0, 0]
-      )
-      return NextResponse.json({ ok: true, id: result.rows[0].id })
-    } catch {
-      // Fallback: sem coluna conteudo_html
-      const result = await db.query(
-        `INSERT INTO dietas (client_id, nome, conteudo_raw, protocolo, kcal, proteina, carboidratos, gorduras)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
-        [client_id, nome, raw, JSON.stringify([]), 0, 0, 0, 0]
-      )
-      return NextResponse.json({ ok: true, id: result.rows[0].id })
-    }
+    const result = await db.query(
+      `INSERT INTO dietas (client_id, nome, conteudo_raw, conteudo_html, protocolo, kcal, proteina, carboidratos, gorduras)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+      [client_id, nome, raw, html, JSON.stringify([]), 0, 0, 0, 0]
+    )
+    return NextResponse.json({ ok: true, id: result.rows[0].id })
 
   } catch (error: any) {
     console.error(error)

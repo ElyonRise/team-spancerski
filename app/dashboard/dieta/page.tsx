@@ -95,15 +95,17 @@ export default function DietaPage() {
         .dieta-content h2,
         .dieta-content h3 {
           color: var(--green);
-          margin: 20px 0 8px;
+          margin: 24px 0 8px;
           font-weight: 800;
           letter-spacing: 1px;
+          text-transform: uppercase;
         }
         .dieta-content strong {
           color: var(--text1);
           font-weight: 700;
         }
-        .dieta-content ul, .dieta-content ol {
+        .dieta-content ul,
+        .dieta-content ol {
           padding-left: 20px;
           color: var(--text1);
         }
@@ -142,7 +144,6 @@ export default function DietaPage() {
           <h3 style={{ color: 'var(--green)', marginBottom: 20, fontSize: '1rem', letterSpacing: 1, fontWeight: 800 }}>
             {selected.nome}
           </h3>
-
           {hasHtml ? (
             <div
               className="dieta-content"
