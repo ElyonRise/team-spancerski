@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { db } from '@/lib/db'
+import { parseDietWithAI } from '@/lib/groq'
 
 async function extractContent(file: File): Promise<{ html: string; raw: string }> {
   const name = file.name.toLowerCase()
@@ -15,7 +16,6 @@ async function extractContent(file: File): Promise<{ html: string; raw: string }
   }
 
   if (name.endsWith('.pdf')) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const pdfParse = require('pdf-parse')
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
@@ -31,9 +31,20 @@ async function extractContent(file: File): Promise<{ html: string; raw: string }
 
 export async function GET(req: NextRequest) {
   const session = await getSession()
-  if (!session) {
-    return NextResponse.json({ error: 'Nao autorizado' }, { status: 401 })
+  if (!session) return NextResponse.json({ error: 'Nao autorizado' }, { status: 401 })
+
+  const url = new URL(req.url)
+
+  if (url.pathname.endsWith('/historico')) {
+    if (session.role !== 'pro') return NextResponse.json({ error: 'Nao autorizado' }, { status: 403 })
+    const result = await db.query(
+      `SELECT d.id, d.nome, d.created_at, u.name as client_name
+       FROM dietas d LEFT JOIN users u ON d.client_id = u.id
+       ORDER BY d.created_at DESC LIMIT 50`
+    )
+    return NextResponse.json(result.rows)
   }
+
   try {
     const result = await db.query(
       `SELECT id, nome, conteudo_raw, conteudo_html, kcal, proteina, carboidratos, gorduras, created_at
@@ -42,8 +53,7 @@ export async function GET(req: NextRequest) {
     )
     return NextResponse.json(result.rows)
   } catch (error: any) {
-    console.error(error)
-    return NextResponse.json({ error: error.message || 'Erro ao buscar dietas' }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
 
@@ -52,11 +62,12 @@ export async function POST(req: NextRequest) {
   if (!session || session.role !== 'pro') {
     return NextResponse.json({ error: 'Nao autorizado' }, { status: 401 })
   }
+
   try {
     const formData = await req.formData()
     const file = formData.get('file') as File
     const client_id = formData.get('client_id') as string
-    const nome = formData.get('nome') as string || 'Protocolo Nutricional'
+    const nome = (formData.get('nome') as string) || 'Protocolo Nutricional'
 
     if (!file || !client_id) {
       return NextResponse.json({ error: 'Arquivo e cliente sao obrigatorios' }, { status: 400 })
@@ -68,13 +79,43 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Nao foi possivel extrair texto do arquivo.' }, { status: 400 })
     }
 
+    let kcal = 0, proteina = 0, carboidratos = 0, gorduras = 0
+    let protocolo: any[] = []
+    let lista_compras: any[] = []
+
+    try {
+      const analise = await parseDietWithAI(raw)
+      kcal = analise.kcal || 0
+      proteina = analise.proteina || 0
+      carboidratos = analise.carboidratos || 0
+      gorduras = analise.gorduras || 0
+      protocolo = analise.protocolo || []
+      lista_compras = analise.lista_compras || []
+    } catch (e) {
+      console.error('Analise IA falhou, salvando sem macros:', e)
+    }
+
     const result = await db.query(
       `INSERT INTO dietas (client_id, nome, conteudo_raw, conteudo_html, protocolo, kcal, proteina, carboidratos, gorduras)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
-      [client_id, nome, raw, html, JSON.stringify([]), 0, 0, 0, 0]
+      [client_id, nome, raw, html, JSON.stringify(protocolo), kcal, proteina, carboidratos, gorduras]
     )
-    return NextResponse.json({ ok: true, id: result.rows[0].id })
 
+    const dietaId = result.rows[0].id
+
+    if (lista_compras.length > 0) {
+      try {
+        await db.query('DELETE FROM lista_compras WHERE client_id=$1', [client_id])
+        await db.query(
+          `INSERT INTO lista_compras (client_id, dieta_id, itens, created_at) VALUES ($1, $2, $3, NOW())`,
+          [client_id, dietaId, JSON.stringify(lista_compras)]
+        )
+      } catch (e) {
+        console.error('Erro ao salvar lista de compras:', e)
+      }
+    }
+
+    return NextResponse.json({ ok: true, id: dietaId, kcal, proteina, carboidratos, gorduras, itens: lista_compras.length })
   } catch (error: any) {
     console.error(error)
     return NextResponse.json({ error: error.message || 'Erro ao processar arquivo' }, { status: 500 })
