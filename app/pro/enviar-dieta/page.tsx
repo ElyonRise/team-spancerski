@@ -94,7 +94,7 @@ function EnviarDietaForm() {
 
                 <option value="">— Selecione —</option>
 
-                {clientes.map(c => <option key={c.id} value={c.id}>{c.name} ({c.email})</option>)}
+                {clientes.map((c: any) => <option key={c.id} value={c.id}>{c.name} ({c.email})</option>)}
 
               </select>
 

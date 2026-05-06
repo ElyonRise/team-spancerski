@@ -156,7 +156,7 @@ export default function MotivacaoPage() {
 
               { label: 'Status hoje', val: isDoneToday ? 'Concluído ✓' : 'Pendente', icon: '🎯' },
 
-            ].map(c => (
+            ].map((c: any) => (
 
               <div key={c.label} style={{ background: 'var(--dark3)', borderRadius: 10, padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 

@@ -180,7 +180,7 @@ export default function DietaPage() {
 
               { label: 'GORDURAS', val: `${selected.gorduras}g`, color: '#f87171' },
 
-            ].map(m => (
+            ].map((m: any) => (
 
               <div key={m.label} style={{ textAlign: 'center', background: 'var(--dark3)', borderRadius: 10, padding: 14 }}>
 

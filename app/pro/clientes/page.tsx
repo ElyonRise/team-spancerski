@@ -74,7 +74,7 @@ export default function ClientesPage() {
 
               <tbody>
 
-                {clientes.map(c => (
+                {clientes.map((c: any) => (
 
                   <tr key={c.id}>
 
