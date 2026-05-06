@@ -5,7 +5,6 @@ import { parseDietWithAI } from '@/lib/groq'
 
 async function extractContent(file: File): Promise<{ html: string; raw: string }> {
   const name = file.name.toLowerCase()
-
   if (name.endsWith('.docx') || name.endsWith('.doc')) {
     const mammoth = await import('mammoth')
     const arrayBuffer = await file.arrayBuffer()
@@ -14,7 +13,6 @@ async function extractContent(file: File): Promise<{ html: string; raw: string }
     const rawResult = await mammoth.extractRawText({ buffer })
     return { html: htmlResult.value || '', raw: rawResult.value || '' }
   }
-
   if (name.endsWith('.pdf')) {
     const pdfParse = require('pdf-parse')
     const arrayBuffer = await file.arrayBuffer()
@@ -22,7 +20,6 @@ async function extractContent(file: File): Promise<{ html: string; raw: string }
     const result = await pdfParse(buffer)
     return { html: '', raw: result.text || '' }
   }
-
   const arrayBuffer = await file.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
   const text = buffer.toString('utf8').replace(/\0/g, '')
@@ -34,6 +31,40 @@ export async function GET(req: NextRequest) {
   if (!session) return NextResponse.json({ error: 'Nao autorizado' }, { status: 401 })
 
   const url = new URL(req.url)
+
+  if (url.searchParams.get('action') === 'reprocessar') {
+    if (session.role !== 'pro') return NextResponse.json({ error: 'Nao autorizado' }, { status: 403 })
+    try {
+      const semLista = await db.query(
+        `SELECT d.id, d.client_id, d.conteudo_raw FROM dietas d
+         LEFT JOIN lista_compras lc ON lc.dieta_id = d.id
+         WHERE lc.id IS NULL AND d.conteudo_raw IS NOT NULL AND LENGTH(d.conteudo_raw) > 10`
+      )
+      let processadas = 0
+      for (const dieta of semLista.rows) {
+        try {
+          const analise = await parseDietWithAI(dieta.conteudo_raw)
+          if (analise.lista_compras && analise.lista_compras.length > 0) {
+            await db.query('DELETE FROM lista_compras WHERE client_id=$1', [dieta.client_id])
+            await db.query(
+              `INSERT INTO lista_compras (client_id, dieta_id, itens, created_at) VALUES ($1, $2, $3, NOW())`,
+              [dieta.client_id, dieta.id, JSON.stringify(analise.lista_compras)]
+            )
+            await db.query(
+              `UPDATE dietas SET kcal=$1, proteina=$2, carboidratos=$3, gorduras=$4, protocolo=$5 WHERE id=$6`,
+              [analise.kcal||0, analise.proteina||0, analise.carboidratos||0, analise.gorduras||0, JSON.stringify(analise.protocolo||[]), dieta.id]
+            )
+            processadas++
+          }
+        } catch (e) {
+          console.error('Erro ao reprocessar dieta', dieta.id, e)
+        }
+      }
+      return NextResponse.json({ ok: true, processadas, total: semLista.rows.length })
+    } catch (e: any) {
+      return NextResponse.json({ error: e.message }, { status: 500 })
+    }
+  }
 
   if (url.pathname.endsWith('/historico')) {
     if (session.role !== 'pro') return NextResponse.json({ error: 'Nao autorizado' }, { status: 403 })
@@ -74,7 +105,6 @@ export async function POST(req: NextRequest) {
     }
 
     const { html, raw } = await extractContent(file)
-
     if (!raw || raw.trim().length < 5) {
       return NextResponse.json({ error: 'Nao foi possivel extrair texto do arquivo.' }, { status: 400 })
     }
@@ -92,7 +122,7 @@ export async function POST(req: NextRequest) {
       protocolo = analise.protocolo || []
       lista_compras = analise.lista_compras || []
     } catch (e) {
-      console.error('Analise IA falhou, salvando sem macros:', e)
+      console.error('Analise IA falhou:', e)
     }
 
     const result = await db.query(
@@ -114,6 +144,13 @@ export async function POST(req: NextRequest) {
         console.error('Erro ao salvar lista de compras:', e)
       }
     }
+
+    try {
+      await db.query(
+        `INSERT INTO feedbacks (client_id, mensagem, tipo, created_at) VALUES ($1, $2, $3, NOW())`,
+        [client_id, `Novo protocolo de dieta enviado: "${nome}". Sua lista de compras foi gerada automaticamente!`, 'sistema']
+      )
+    } catch {}
 
     return NextResponse.json({ ok: true, id: dietaId, kcal, proteina, carboidratos, gorduras, itens: lista_compras.length })
   } catch (error: any) {
