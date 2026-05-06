@@ -64,38 +64,37 @@ export default function LoginPage() {
 
         {/* Logo pequena */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <Link href="/"><Logo size={65} /></Link>
-          <div style={{ marginTop: 12, fontSize: '1.25rem', fontWeight: 800, letterSpacing: 3, color: 'var(--green)' }}>
-            SPANCERSKI
+          <Link href="/"><Logo size={70} /></Link>
+          <div style={{ marginTop: 12, fontSize: '1.35rem', fontWeight: 800, letterSpacing: 2, color: 'var(--green)' }}>
+            NUTRILENS PRO
           </div>
-          <div style={{ fontSize: '0.7rem', color: 'var(--purple)', letterSpacing: 4 }}>TEAM</div>
         </div>
 
         <div className="card">
 
-          {/* Abas */}
+          {/* Abas melhoradas */}
           <div style={{ 
             display: 'flex', 
             background: 'var(--dark3)', 
-            borderRadius: 10, 
-            padding: 4, 
-            marginBottom: 24 
+            borderRadius: 12, 
+            padding: 5, 
+            marginBottom: 28 
           }}>
             <button 
               onClick={() => setTab('client')}
-              className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${tab === 'client' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'}`}
+              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'client' ? 'bg-green-500 text-black shadow-md' : 'text-gray-400 hover:text-white'}`}
             >
               CLIENTE
             </button>
             <button 
               onClick={() => setTab('pro')}
-              className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${tab === 'pro' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'}`}
+              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'pro' ? 'bg-green-500 text-black shadow-md' : 'text-gray-400 hover:text-white'}`}
             >
               PROFISSIONAL
             </button>
             <button 
               onClick={() => setTab('forgot')}
-              className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${tab === 'forgot' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'}`}
+              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'forgot' ? 'bg-green-500 text-black shadow-md' : 'text-gray-400 hover:text-white'}`}
             >
               ESQUECI SENHA
             </button>
@@ -107,79 +106,45 @@ export default function LoginPage() {
             <form onSubmit={handleLogin}>
               <h2 style={{ 
                 color: 'var(--green)', 
-                fontSize: '1.3rem', 
+                fontSize: '1.35rem', 
                 fontWeight: 800, 
-                marginBottom: 8,
-                letterSpacing: 1 
+                marginBottom: 6 
               }}>
                 {tab === 'client' ? 'ÁREA DO CLIENTE' : 'ÁREA PROFISSIONAL'}
               </h2>
               <p className="text-muted text-sm mb-16">
                 {tab === 'client' 
                   ? 'Acesse sua conta e acompanhe seu progresso' 
-                  : 'Acesso exclusivo para o profissional'}
+                  : 'Acesso exclusivo para profissionais'}
               </p>
 
               <div className="form-group">
                 <label>Email</label>
-                <input 
-                  type="email" 
-                  value={email} 
-                  onChange={e => setEmail(e.target.value)} 
-                  placeholder="seu@email.com" 
-                  required 
-                />
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="seu@email.com" required />
               </div>
 
               <div className="form-group">
                 <label>Senha</label>
-                <input 
-                  type="password" 
-                  value={password} 
-                  onChange={e => setPassword(e.target.value)} 
-                  placeholder="••••••••" 
-                  required 
-                />
+                <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required />
               </div>
 
-              <button 
-                type="submit" 
-                className="btn btn-primary btn-full mt-8" 
-                disabled={loading}
-              >
+              <button type="submit" className="btn btn-primary btn-full mt-8" disabled={loading}>
                 {loading ? <span className="loader" /> : 'ENTRAR'}
               </button>
             </form>
           ) : (
             <form onSubmit={handleForgot}>
-              <h2 style={{ 
-                color: 'var(--green)', 
-                fontSize: '1.3rem', 
-                fontWeight: 800, 
-                marginBottom: 8 
-              }}>
+              <h2 style={{ color: 'var(--green)', fontSize: '1.35rem', fontWeight: 800, marginBottom: 8 }}>
                 RECUPERAR SENHA
               </h2>
-              <p className="text-muted text-sm mb-16">
-                Informe seu email para receber o link de redefinição.
-              </p>
+              <p className="text-muted text-sm mb-16">Informe seu email para receber o link de redefinição.</p>
 
               <div className="form-group">
                 <label>Email</label>
-                <input 
-                  type="email" 
-                  value={resetEmail} 
-                  onChange={e => setResetEmail(e.target.value)} 
-                  placeholder="seu@email.com" 
-                  required 
-                />
+                <input type="email" value={resetEmail} onChange={e => setResetEmail(e.target.value)} placeholder="seu@email.com" required />
               </div>
 
-              <button 
-                type="submit" 
-                className="btn btn-primary btn-full mt-8" 
-                disabled={loading}
-              >
+              <button type="submit" className="btn btn-primary btn-full mt-8" disabled={loading}>
                 {loading ? <span className="loader" /> : 'ENVIAR LINK'}
               </button>
             </form>
