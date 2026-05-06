@@ -2,6 +2,33 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { db } from '@/lib/db'
 
+async function extractText(file: File): Promise<string> {
+  const name = file.name.toLowerCase()
+
+  // DOCX - extrai texto com mammoth
+  if (name.endsWith('.docx') || name.endsWith('.doc')) {
+    const mammoth = await import('mammoth')
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+    const result = await mammoth.extractRawText({ buffer })
+    return result.value || ''
+  }
+
+  // PDF - extrai texto via pdf-parse
+  if (name.endsWith('.pdf')) {
+    const pdfParse = (await import('pdf-parse')).default
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+    const result = await pdfParse(buffer)
+    return result.text || ''
+  }
+
+  // TXT e outros - leitura direta removendo null bytes
+  const arrayBuffer = await file.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
+  return buffer.toString('utf8').replace(/\0/g, '')
+}
+
 export async function POST(req: NextRequest) {
   const session = await getSession()
   if (!session || session.role !== 'pro') {
@@ -18,13 +45,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Arquivo e cliente sao obrigatorios' }, { status: 400 })
     }
 
-    const rawText = await file.text()
+    const rawText = await extractText(file)
 
-    if (!rawText || rawText.trim().length < 10) {
-      return NextResponse.json({ error: 'Arquivo invalido ou vazio' }, { status: 400 })
+    if (!rawText || rawText.trim().length < 5) {
+      return NextResponse.json({ error: 'Nao foi possivel extrair texto do arquivo. Verifique se o arquivo nao esta corrompido.' }, { status: 400 })
     }
 
-    // Salva direto sem processar com IA
+    // Salva o conteudo extraido diretamente, sem IA
     const result = await db.query(
       `INSERT INTO dietas (client_id, nome, conteudo_raw, protocolo, kcal, proteina, carboidratos, gorduras)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
@@ -38,6 +65,6 @@ export async function POST(req: NextRequest) {
 
   } catch (error: any) {
     console.error(error)
-    return NextResponse.json({ error: error.message || 'Erro ao processar' }, { status: 500 })
+    return NextResponse.json({ error: error.message || 'Erro ao processar arquivo' }, { status: 500 })
   }
 }
