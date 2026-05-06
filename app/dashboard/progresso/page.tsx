@@ -1,86 +1,84 @@
-'use client'
-
-import { useState, useEffect } from 'react'
+'use client';
+import { useState } from 'react';
 
 export default function ProgressoPage() {
-  const [fotos, setFotos] = useState<any[]>([])
-  const [tipo, setTipo] = useState('progress')
-  const [data, setData] = useState(new Date().toISOString().split('T')[0])
-  const [uploading, setUploading] = useState(false)
+  const [fotoAntes, setFotoAntes] = useState<File | null>(null);
+  const [fotoDepois, setFotoDepois] = useState<File | null>(null);
+  const [previewAntes, setPreviewAntes] = useState<string | null>(null);
+  const [previewDepois, setPreviewDepois] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [analise, setAnalise] = useState<any>(null);
+  const [erro, setErro] = useState('');
 
-  useEffect(() => {
-    fetch('/api/galeria').then(r => r.json()).then(setFotos)
-  }, [])
-
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading(true)
-    const reader = new FileReader()
-    reader.onload = async (ev) => {
-      const base64 = ev.target?.result as string
-      const res = await fetch('/api/galeria', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: base64, tipo, data_foto: data })
-      })
-      const d = await res.json()
-      if (d.ok) setFotos(prev => [{ id: d.id, url: base64, tipo, data_foto: data }, ...prev])
-      setUploading(false)
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>, tipo: 'antes' | 'depois') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (tipo === 'antes') {
+      setFotoAntes(file);
+      const reader = new FileReader();
+      reader.onload = ev => setPreviewAntes(ev.target?.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setFotoDepois(file);
+      const reader = new FileReader();
+      reader.onload = ev => setPreviewDepois(ev.target?.result as string);
+      reader.readAsDataURL(file);
     }
-    reader.readAsDataURL(file)
-  }
+  };
 
-  async function deleteFoto(id: number) {
-    await fetch(`/api/galeria?id=${id}`, { method: 'DELETE' })
-    setFotos(prev => prev.filter(f => f.id !== id))
-  }
+  const gerarAnalise = async () => {
+    if (!fotoAntes || !fotoDepois) return setErro('Envie foto ANTES e DEPOIS');
+    setLoading(true);
+    setErro('');
 
-  const tipoLabel: Record<string, string> = { before: 'ANTES', after: 'DEPOIS', progress: 'PROGRESSO' }
+    const form = new FormData();
+    form.append('foto_antes', fotoAntes);
+    form.append('foto_depois', fotoDepois);
+
+    const res = await fetch('/api/analise-corporal', { method: 'POST', body: form });
+    const data = await res.json();
+
+    if (data.erro) setErro(data.erro);
+    else setAnalise(data);
+
+    setLoading(false);
+  };
 
   return (
-    <>
-      <div className="dash-header"><h1>MEU PROGRESSO</h1><p>Registre sua transformacao</p></div>
+    <div className="card">
+      <h1>Análise Corporal por IA</h1>
+      <p>Envie foto antiga e atual para comparação.</p>
 
-      <div className="card mb-24">
-        <h3>NOVA FOTO</h3>
-        <div className="form-row" style={{ marginBottom: 16 }}>
-          <div className="form-group">
-            <label>Tipo</label>
-            <select value={tipo} onChange={e => setTipo(e.target.value)}>
-              <option value="before">Antes</option>
-              <option value="progress">Progresso</option>
-              <option value="after">Depois</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Data</label>
-            <input type="date" value={data} onChange={e => setData(e.target.value)} />
-          </div>
+      <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'20px', margin:'25px 0'}}>
+        <div>
+          <h3>Foto ANTES</h3>
+          <input type="file" accept="image/*" onChange={(e) => handleFile(e, 'antes')} />
+          {previewAntes && <img src={previewAntes} style={{maxWidth:'100%', marginTop:10, borderRadius:12}} />}
         </div>
-        <div className="upload-zone" onClick={() => document.getElementById('photoInput')?.click()}>
-          <input type="file" id="photoInput" accept="image/*" style={{ display: 'none' }} onChange={handleUpload} />
-          <p style={{ marginTop: 8, color: 'var(--text2)' }}>{uploading ? 'Enviando...' : 'Clique para selecionar foto'}</p>
+        <div>
+          <h3>Foto DEPOIS</h3>
+          <input type="file" accept="image/*" onChange={(e) => handleFile(e, 'depois')} />
+          {previewDepois && <img src={previewDepois} style={{maxWidth:'100%', marginTop:10, borderRadius:12}} />}
         </div>
       </div>
 
-      <h3 style={{ color: 'var(--green)', marginBottom: 16 }}>GALERIA ({fotos.length} fotos)</h3>
-      {fotos.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: 40, color: 'var(--text2)' }}>
-          <p>Nenhuma foto ainda. Faca upload acima!</p>
-        </div>
-      ) : (
-        <div className="gallery-grid">
-          {fotos.map(f => (
-            <div key={f.id} className="gallery-item">
-              <img src={f.url} alt={f.tipo} />
-              <div className="gallery-label">
-                <span>{tipoLabel[f.tipo] || f.tipo}</span>
-                <button onClick={() => deleteFoto(f.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '1rem' }}>X</button>
-              </div>
-            </div>
-          ))}
+      <button className="btn btn-primary btn-full" onClick={gerarAnalise} disabled={loading}>
+        {loading ? 'Analisando...' : 'GERAR ANÁLISE CORPORAL'}
+      </button>
+
+      {erro && <div className="alert alert-error">{erro}</div>}
+
+      {analise && (
+        <div style={{marginTop:30, padding:20, background:'var(--dark3)', borderRadius:12}}>
+          <h2>Resultado da IA</h2>
+          <p><strong>{analise.resumo}</strong></p>
+          <h3>Pontos Positivos:</h3>
+          <ul>{analise.pontos_positivos?.map((p:string,i:number) => <li key={i}>• {p}</li>)}</ul>
+          <h3>Áreas para Melhorar:</h3>
+          <ul>{analise.areas_melhoria?.map((p:string,i:number) => <li key={i}>• {p}</li>)}</ul>
+          <p><strong>Motivação:</strong> {analise.motivacao}</p>
         </div>
       )}
-    </>
-  )
+    </div>
+  );
 }
