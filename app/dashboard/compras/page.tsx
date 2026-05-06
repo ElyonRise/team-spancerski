@@ -34,7 +34,7 @@ export default function ComprasPage() {
 
       next.has(key) ? next.delete(key) : next.add(key)
 
-      localStorage.setItem('compras_checked', JSON.stringify([...next]))
+      localStorage.setItem('compras_checked', JSON.stringify(Array.from(next)))
 
       return next
 
