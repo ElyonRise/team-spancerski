@@ -78,24 +78,9 @@ export default function LoginPage() {
             marginBottom: 28,
             gap: '6px'
           }}>
-            <button 
-              onClick={() => setTab('client')} 
-              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'client' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'}`}
-            >
-              CLIENTE
-            </button>
-            <button 
-              onClick={() => setTab('pro')} 
-              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'pro' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'}`}
-            >
-              PROFISSIONAL
-            </button>
-            <button 
-              onClick={() => setTab('forgot')} 
-              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'forgot' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'}`}
-            >
-              ESQUECI SENHA
-            </button>
+            <button onClick={() => setTab('client')} className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'client' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'}`}>CLIENTE</button>
+            <button onClick={() => setTab('pro')} className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'pro' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'}`}>PROFISSIONAL</button>
+            <button onClick={() => setTab('forgot')} className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'forgot' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'}`}>ESQUECI SENHA</button>
           </div>
 
           {alert && <div className={`alert alert-${alert.type}`}>{alert.msg}</div>}
