@@ -1,0 +1,18 @@
+{
+  "buildCommand": "next build",
+  "devCommand": "next dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["gru1"],
+  "env": {
+    "DATABASE_URL": "@database_url",
+    "JWT_SECRET": "@jwt_secret",
+    "GROQ_API_KEY": "@groq_api_key",
+    "EMAIL_USER": "@email_user",
+    "EMAIL_PASS": "@email_pass",
+    "EMAIL_FROM": "@email_from",
+    "PRO_EMAIL": "@pro_email",
+    "PRO_PASSWORD_HASH": "@pro_password_hash",
+    "NEXT_PUBLIC_APP_URL": "@next_public_app_url"
+  }
+}
