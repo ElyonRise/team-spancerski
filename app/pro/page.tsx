@@ -72,7 +72,7 @@ export default async function ProDashboard() {
 
               <tbody>
 
-                {clients.map(c => (
+                {clients.map((c: any) => (
 
                   <tr key={c.id}>
 
