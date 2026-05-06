@@ -62,39 +62,39 @@ export default function LoginPage() {
     }}>
       <div style={{ width: '100%', maxWidth: 420 }}>
 
-        {/* Logo pequena */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <Link href="/"><Logo size={70} /></Link>
-          <div style={{ marginTop: 12, fontSize: '1.35rem', fontWeight: 800, letterSpacing: 2, color: 'var(--green)' }}>
+          <Link href="/"><Logo size={65} /></Link>
+          <div style={{ marginTop: 12, fontSize: '1.4rem', fontWeight: 800, letterSpacing: 2, color: 'var(--green)' }}>
             NUTRILENS PRO
           </div>
         </div>
 
         <div className="card">
 
-          {/* Abas melhoradas */}
+          {/* Abas Corrigidas */}
           <div style={{ 
             display: 'flex', 
             background: 'var(--dark3)', 
             borderRadius: 12, 
-            padding: 5, 
-            marginBottom: 28 
+            padding: 6, 
+            marginBottom: 28,
+            gap: '6px'
           }}>
             <button 
               onClick={() => setTab('client')}
-              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'client' ? 'bg-green-500 text-black shadow-md' : 'text-gray-400 hover:text-white'}`}
+              className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${tab === 'client' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'}`}
             >
               CLIENTE
             </button>
             <button 
               onClick={() => setTab('pro')}
-              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'pro' ? 'bg-green-500 text-black shadow-md' : 'text-gray-400 hover:text-white'}`}
+              className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${tab === 'pro' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'}`}
             >
               PROFISSIONAL
             </button>
             <button 
               onClick={() => setTab('forgot')}
-              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'forgot' ? 'bg-green-500 text-black shadow-md' : 'text-gray-400 hover:text-white'}`}
+              className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${tab === 'forgot' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'}`}
             >
               ESQUECI SENHA
             </button>
@@ -104,12 +104,7 @@ export default function LoginPage() {
 
           {tab !== 'forgot' ? (
             <form onSubmit={handleLogin}>
-              <h2 style={{ 
-                color: 'var(--green)', 
-                fontSize: '1.35rem', 
-                fontWeight: 800, 
-                marginBottom: 6 
-              }}>
+              <h2 style={{ color: 'var(--green)', fontSize: '1.35rem', fontWeight: 800, marginBottom: 8 }}>
                 {tab === 'client' ? 'ÁREA DO CLIENTE' : 'ÁREA PROFISSIONAL'}
               </h2>
               <p className="text-muted text-sm mb-16">
