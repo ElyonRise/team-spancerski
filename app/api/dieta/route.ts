@@ -14,9 +14,10 @@ async function extractText(file: File): Promise<string> {
     return result.value || ''
   }
 
-  // PDF - extrai texto via pdf-parse
+  // PDF - require() evita erro de tipagem ESM do pdf-parse
   if (name.endsWith('.pdf')) {
-    const pdfParse = (await import('pdf-parse')).default
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const pdfParse = require('pdf-parse')
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
     const result = await pdfParse(buffer)
@@ -48,10 +49,9 @@ export async function POST(req: NextRequest) {
     const rawText = await extractText(file)
 
     if (!rawText || rawText.trim().length < 5) {
-      return NextResponse.json({ error: 'Nao foi possivel extrair texto do arquivo. Verifique se o arquivo nao esta corrompido.' }, { status: 400 })
+      return NextResponse.json({ error: 'Nao foi possivel extrair texto do arquivo.' }, { status: 400 })
     }
 
-    // Salva o conteudo extraido diretamente, sem IA
     const result = await db.query(
       `INSERT INTO dietas (client_id, nome, conteudo_raw, protocolo, kcal, proteina, carboidratos, gorduras)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
