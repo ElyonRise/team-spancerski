@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Logo } from '@/components/Logo'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -62,16 +61,15 @@ export default function LoginPage() {
     }}>
       <div style={{ width: '100%', maxWidth: 420 }}>
 
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <Link href="/"><Logo size={65} /></Link>
-          <div style={{ marginTop: 12, fontSize: '1.4rem', fontWeight: 800, letterSpacing: 2, color: 'var(--green)' }}>
-            NUTRILENS PRO
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+          <div style={{ fontSize: '2.8rem', fontWeight: 900, letterSpacing: 2, color: '#00ff41' }}>
+            NUTRILENS
           </div>
+          <div style={{ fontSize: '1.1rem', color: '#7b2fff', letterSpacing: 4 }}>PRO</div>
         </div>
 
         <div className="card">
 
-          {/* Abas Corrigidas */}
           <div style={{ 
             display: 'flex', 
             background: 'var(--dark3)', 
@@ -81,20 +79,20 @@ export default function LoginPage() {
             gap: '6px'
           }}>
             <button 
-              onClick={() => setTab('client')}
-              className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${tab === 'client' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'}`}
+              onClick={() => setTab('client')} 
+              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'client' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'}`}
             >
               CLIENTE
             </button>
             <button 
-              onClick={() => setTab('pro')}
-              className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${tab === 'pro' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'}`}
+              onClick={() => setTab('pro')} 
+              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'pro' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'}`}
             >
               PROFISSIONAL
             </button>
             <button 
-              onClick={() => setTab('forgot')}
-              className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${tab === 'forgot' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'}`}
+              onClick={() => setTab('forgot')} 
+              className={`flex-1 py-3.5 text-sm font-bold rounded-xl transition-all ${tab === 'forgot' ? 'bg-white text-black shadow' : 'text-gray-400 hover:text-white'}`}
             >
               ESQUECI SENHA
             </button>
@@ -104,13 +102,11 @@ export default function LoginPage() {
 
           {tab !== 'forgot' ? (
             <form onSubmit={handleLogin}>
-              <h2 style={{ color: 'var(--green)', fontSize: '1.35rem', fontWeight: 800, marginBottom: 8 }}>
+              <h2 style={{ color: 'var(--green)', fontSize: '1.4rem', fontWeight: 800, marginBottom: 8 }}>
                 {tab === 'client' ? 'ÁREA DO CLIENTE' : 'ÁREA PROFISSIONAL'}
               </h2>
               <p className="text-muted text-sm mb-16">
-                {tab === 'client' 
-                  ? 'Acesse sua conta e acompanhe seu progresso' 
-                  : 'Acesso exclusivo para profissionais'}
+                {tab === 'client' ? 'Acesse sua conta e acompanhe seu progresso' : 'Acesso exclusivo para profissionais'}
               </p>
 
               <div className="form-group">
@@ -129,9 +125,7 @@ export default function LoginPage() {
             </form>
           ) : (
             <form onSubmit={handleForgot}>
-              <h2 style={{ color: 'var(--green)', fontSize: '1.35rem', fontWeight: 800, marginBottom: 8 }}>
-                RECUPERAR SENHA
-              </h2>
+              <h2 style={{ color: 'var(--green)', fontSize: '1.4rem', fontWeight: 800, marginBottom: 8 }}>RECUPERAR SENHA</h2>
               <p className="text-muted text-sm mb-16">Informe seu email para receber o link de redefinição.</p>
 
               <div className="form-group">
