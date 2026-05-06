@@ -2,15 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { db } from '@/lib/db'
 
-async function extractText(file: File): Promise<string> {
+async function extractContent(file: File): Promise<{ html: string; raw: string }> {
   const name = file.name.toLowerCase()
 
   if (name.endsWith('.docx') || name.endsWith('.doc')) {
     const mammoth = await import('mammoth')
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
-    const result = await mammoth.extractRawText({ buffer })
-    return result.value || ''
+    const htmlResult = await mammoth.convertToHtml({ buffer })
+    const rawResult = await mammoth.extractRawText({ buffer })
+    return { html: htmlResult.value || '', raw: rawResult.value || '' }
   }
 
   if (name.endsWith('.pdf')) {
@@ -19,12 +20,14 @@ async function extractText(file: File): Promise<string> {
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
     const result = await pdfParse(buffer)
-    return result.text || ''
+    const text = result.text || ''
+    return { html: '', raw: text }
   }
 
   const arrayBuffer = await file.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
-  return buffer.toString('utf8').replace(/\0/g, '')
+  const text = buffer.toString('utf8').replace(/\0/g, '')
+  return { html: '', raw: text }
 }
 
 // GET - busca dietas do cliente logado
@@ -36,7 +39,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const result = await db.query(
-      `SELECT id, nome, conteudo_raw, kcal, proteina, carboidratos, gorduras, created_at
+      `SELECT id, nome, conteudo_raw, conteudo_html, kcal, proteina, carboidratos, gorduras, created_at
        FROM dietas WHERE client_id = $1 ORDER BY created_at DESC`,
       [session.id]
     )
@@ -64,19 +67,29 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Arquivo e cliente sao obrigatorios' }, { status: 400 })
     }
 
-    const rawText = await extractText(file)
+    const { html, raw } = await extractContent(file)
 
-    if (!rawText || rawText.trim().length < 5) {
+    if (!raw || raw.trim().length < 5) {
       return NextResponse.json({ error: 'Nao foi possivel extrair texto do arquivo.' }, { status: 400 })
     }
 
-    const result = await db.query(
-      `INSERT INTO dietas (client_id, nome, conteudo_raw, protocolo, kcal, proteina, carboidratos, gorduras)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
-      [client_id, nome, rawText, JSON.stringify([]), 0, 0, 0, 0]
-    )
-
-    return NextResponse.json({ ok: true, id: result.rows[0].id })
+    // Tenta salvar com conteudo_html - se coluna nao existir, salva so o raw
+    try {
+      const result = await db.query(
+        `INSERT INTO dietas (client_id, nome, conteudo_raw, conteudo_html, protocolo, kcal, proteina, carboidratos, gorduras)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+        [client_id, nome, raw, html, JSON.stringify([]), 0, 0, 0, 0]
+      )
+      return NextResponse.json({ ok: true, id: result.rows[0].id })
+    } catch {
+      // Fallback: sem coluna conteudo_html
+      const result = await db.query(
+        `INSERT INTO dietas (client_id, nome, conteudo_raw, protocolo, kcal, proteina, carboidratos, gorduras)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+        [client_id, nome, raw, JSON.stringify([]), 0, 0, 0, 0]
+      )
+      return NextResponse.json({ ok: true, id: result.rows[0].id })
+    }
 
   } catch (error: any) {
     console.error(error)
