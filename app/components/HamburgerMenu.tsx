@@ -7,22 +7,18 @@ export default function HamburgerMenu() {
 
   return (
     <>
-      <button 
-        onClick={() => setOpen(!open)} 
-        style={{ fontSize: '28px', background: 'none', border: 'none', color: 'var(--green)', cursor: 'pointer', padding: '8px' }}
-      >
+      <button onClick={() => setOpen(!open)} className="text-3xl text-green-400 hover:text-white transition-colors">
         ☰
       </button>
 
       {open && (
-        <div style={{ position: 'fixed', top: '70px', left: '15px', background: 'var(--dark2)', padding: '20px', borderRadius: '12px', zIndex: 9999, minWidth: '230px', boxShadow: '0 10px 30px rgba(0,0,0,0.7)' }}>
-          <Link href="/dashboard" style={{display:'block', padding:'10px 0', color:'var(--text1)'}} onClick={() => setOpen(false)}>Inicio</Link>
-          <Link href="/dashboard/dieta" style={{display:'block', padding:'10px 0', color:'var(--text1)'}} onClick={() => setOpen(false)}>Dieta</Link>
-          <Link href="/dashboard/refeicoes" style={{display:'block', padding:'10px 0', color:'var(--text1)'}} onClick={() => setOpen(false)}>Refeicoes</Link>
-          <Link href="/dashboard/compras" style={{display:'block', padding:'10px 0', color:'var(--text1)'}} onClick={() => setOpen(false)}>Compras</Link>
-          <Link href="/dashboard/progresso" style={{display:'block', padding:'10px 0', color:'var(--text1)'}} onClick={() => setOpen(false)}>Progresso</Link>
-          <Link href="/dashboard/ia" style={{display:'block', padding:'10px 0', color:'var(--text1)'}} onClick={() => setOpen(false)}>NutriBot</Link>
-          <Link href="/dashboard/configuracoes" style={{display:'block', padding:'10px 0', color:'var(--text1)'}} onClick={() => setOpen(false)}>Configuracoes</Link>
+        <div className="fixed top-20 left-6 glass-card p-6 rounded-2xl z-50 min-w-[240px] shadow-2xl">
+          <Link href="/dashboard" className="block py-3 text-white hover:text-green-400" onClick={() => setOpen(false)}>Início</Link>
+          <Link href="/dashboard/dieta" className="block py-3 text-white hover:text-green-400" onClick={() => setOpen(false)}>Meu Protocolo</Link>
+          <Link href="/dashboard/refeicoes" className="block py-3 text-white hover:text-green-400" onClick={() => setOpen(false)}>Registro de Refeições</Link>
+          <Link href="/dashboard/compras" className="block py-3 text-white hover:text-green-400" onClick={() => setOpen(false)}>Lista de Compras</Link>
+          <Link href="/dashboard/progresso" className="block py-3 text-white hover:text-green-400" onClick={() => setOpen(false)}>Progresso & Análise IA</Link>
+          <Link href="/dashboard/ia" className="block py-3 text-white hover:text-green-400" onClick={() => setOpen(false)}>Assistente IA</Link>
         </div>
       )}
     </>

@@ -4,50 +4,46 @@ import Link from 'next/link'
 
 export default async function ProDashboard() {
   const session = await getSession()
-  const [clientsRes, dietasRes] = await Promise.all([
-    db.query('SELECT id, name, email, goal, created_at FROM users WHERE role=\'client\' ORDER BY created_at DESC LIMIT 5'),
-    db.query('SELECT COUNT(*) as total FROM dietas'),
+
+  const [stats] = await Promise.all([
+    db.query(`SELECT 
+      (SELECT COUNT(*) FROM users WHERE role='client') as total_clientes,
+      (SELECT COUNT(*) FROM dietas) as total_dietas,
+      (SELECT COUNT(*) FROM feedbacks WHERE lido=false) as pendentes
+    `)
   ])
-  const clients = clientsRes.rows
-  const totalDietas = dietasRes.rows[0]?.total || 0
-  const totalClients = await db.query('SELECT COUNT(*) as total FROM users WHERE role=\'client\'')
 
   return (
-    <>
-      <div className="dash-header"><h1>PAINEL PROFISSIONAL</h1><p>Bem-vindo(a), Team Spancerski</p></div>
-      <div className="stats-grid">
-        <div className="stat-card"><div className="num">{totalClients.rows[0]?.total || 0}</div><div className="lbl">clientes ativos</div></div>
-        <div className="stat-card"><div className="num">{totalDietas}</div><div className="lbl">dietas enviadas</div></div>
-      </div>
-      <div className="card mt-16">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <h3>CLIENTES RECENTES</h3>
-          <Link href="/pro/clientes" className="btn btn-outline btn-sm">Ver todos</Link>
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="flex justify-between items-center mb-10">
+        <div>
+          <h1 className="text-5xl font-bold text-white tracking-tighter">SPANCERSKI</h1>
+          <p className="text-green-400 text-xl">Painel do Profissional</p>
         </div>
-        {clients.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: 24 }}>
-            <p className="text-muted">Nenhum cliente ainda.</p>
-            <Link href="/pro/novo-cliente" className="btn btn-primary btn-sm" style={{ marginTop: 12, display: 'inline-block' }}>+ Adicionar Primeiro Cliente</Link>
-          </div>
-        ) : (
-          <div className="table-wrap">
-            <table>
-              <thead><tr><th>Nome</th><th>Email</th><th>Objetivo</th><th>Cadastro</th><th>Acao</th></tr></thead>
-              <tbody>
-                {clients.map((c: any) => (
-                  <tr key={c.id}>
-                    <td style={{ fontWeight: 600 }}>{c.name}</td>
-                    <td style={{ color: 'var(--text2)' }}>{c.email}</td>
-                    <td><span className="badge badge-green">{c.goal || '—'}</span></td>
-                    <td style={{ color: 'var(--text2)', fontSize: '0.8rem' }}>{new Date(c.created_at).toLocaleDateString('pt-BR')}</td>
-                    <td><Link href={`/pro/enviar-dieta?client=${c.id}`} className="btn btn-outline btn-sm">Enviar dieta</Link></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <Link href="/pro/novo-cliente" className="bg-green-500 hover:bg-green-600 px-8 py-4 rounded-2xl font-semibold text-black">
+          + Novo Cliente
+        </Link>
       </div>
-    </>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="glass-card p-8 rounded-3xl">
+          <p className="text-gray-400">CLIENTES ATIVOS</p>
+          <p className="text-6xl font-bold text-white mt-4">{stats.rows[0].total_clientes}</p>
+        </div>
+        <div className="glass-card p-8 rounded-3xl">
+          <p className="text-gray-400">DIETAS ENVIADAS</p>
+          <p className="text-6xl font-bold text-white mt-4">{stats.rows[0].total_dietas}</p>
+        </div>
+        <div className="glass-card p-8 rounded-3xl border border-red-500/30">
+          <p className="text-gray-400">FEEDBACKS PENDENTES</p>
+          <p className="text-6xl font-bold text-red-400 mt-4">{stats.rows[0].pendentes}</p>
+        </div>
+      </div>
+
+      <div className="glass-card rounded-3xl p-8">
+        <h2 className="text-2xl font-semibold mb-6">Clientes Recentes</h2>
+        {/* Tabela será carregada no client component se necessário */}
+      </div>
+    </div>
   )
 }
