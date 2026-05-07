@@ -41,31 +41,57 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#111318] flex items-center justify-center p-4">
-      <div className="w-full max-w-md glass-card p-10 rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-xl">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-white tracking-tighter italic">SPANCERSKI</h1>
-          <p className="text-[#39ff14] mt-2 uppercase tracking-widest text-sm">Professional Portal</p>
+    <div style={{
+      minHeight: '100vh',
+      background: 'var(--dark)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '16px',
+    }}>
+      <div style={{
+        width: '100%',
+        maxWidth: '420px',
+        background: 'var(--card)',
+        border: '1px solid var(--border)',
+        borderRadius: '20px',
+        padding: '40px',
+        boxShadow: '0 0 40px rgba(0,255,65,0.05)',
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <h1 style={{
+            fontSize: '2rem',
+            fontWeight: 900,
+            letterSpacing: '4px',
+            color: 'var(--green)',
+            textShadow: 'var(--glow)',
+          }}>SPANCERSKI</h1>
+          <p style={{
+            color: 'var(--text2)',
+            marginTop: '6px',
+            letterSpacing: '3px',
+            fontSize: '0.7rem',
+            textTransform: 'uppercase',
+          }}>Professional Portal</p>
         </div>
 
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label className="block text-xs font-medium text-gray-400 mb-2 uppercase">E-mail</label>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>E-mail</label>
             <input
               type="email"
               required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:border-[#39ff14] focus:outline-none transition-all"
               placeholder="seu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-400 mb-2 uppercase">Senha</label>
+
+          <div className="form-group">
+            <label>Senha</label>
             <input
               type="password"
               required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:border-[#39ff14] focus:outline-none transition-all"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -73,17 +99,18 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <p className="text-red-400 text-sm text-center bg-red-400/10 border border-red-400/20 rounded-xl px-4 py-3">
-              {error}
-            </p>
+            <div className="alert alert-error">{error}</div>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#39ff14] hover:bg-green-400 text-black font-bold py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(57,255,20,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn btn-primary btn-full"
+            style={{ marginTop: '8px', fontSize: '0.95rem', letterSpacing: '1.5px' }}
           >
-            {loading ? 'ENTRANDO...' : 'ACESSAR PAINEL'}
+            {loading ? (
+              <><span className="loader" style={{ marginRight: '8px' }}></span>ENTRANDO...</>
+            ) : 'ACESSAR PAINEL'}
           </button>
         </form>
       </div>
