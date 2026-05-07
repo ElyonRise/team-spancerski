@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/db'
+import { db } from '@/lib/db'
 import Link from 'next/link'
 
 export default async function ProDashboard() {
