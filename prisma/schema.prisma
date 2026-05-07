@@ -3,19 +3,111 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL")
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
-  name  String?
-  role  String @default("client")
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         String   @default("client")
+  phone        String?
+  goal         String?
+  weightStart  Decimal? @map("weight_start")
+  heightCm     Decimal? @map("height_cm")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  dietas       Dieta[]
+  checkins     Checkin[]
+  streaks      MotivacaoStreak[]
+  feedbacks    Feedback[]
+  galeria      Galeria[]
+  compras      Compra[]
+  imcRegistros ImcRegistro[]
+
+  @@map("users")
 }
 
 model Dieta {
-  id        String   @id @default(cuid())
-  nome      String
-  createdAt DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  clientId  Int      @map("client_id")
+  nome      String?
+  conteudo  String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  client User @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("dietas")
+}
+
+model Checkin {
+  id        Int      @id @default(autoincrement())
+  clientId  Int      @map("client_id")
+  peso      Decimal?
+  obs       String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  client User @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("checkins")
+}
+
+model MotivacaoStreak {
+  id        Int      @id @default(autoincrement())
+  clientId  Int      @map("client_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  client User @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("motivacao_streak")
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  clientId  Int      @map("client_id")
+  texto     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  client User @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("feedbacks")
+}
+
+model Galeria {
+  id        Int      @id @default(autoincrement())
+  clientId  Int      @map("client_id")
+  url       String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  client User @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("galeria")
+}
+
+model Compra {
+  id        Int      @id @default(autoincrement())
+  clientId  Int      @map("client_id")
+  descricao String?
+  valor     Decimal?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  client User @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("compras")
+}
+
+model ImcRegistro {
+  id        Int      @id @default(autoincrement())
+  clientId  Int      @map("client_id")
+  peso      Decimal?
+  altura    Decimal?
+  imc       Decimal?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  client User @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("imc_registros")
 }
