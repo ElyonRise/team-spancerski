@@ -8,48 +8,41 @@ export default async function ProDashboard() {
   ]).catch(() => [0, 0]);
 
   return (
-    <div className="min-h-screen bg-[#0c0e12] text-[#e2e2e8] p-6 md:p-10">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12 border-b border-white/5 pb-8">
-          <div>
-            <h1 className="text-6xl md:text-7xl font-black tracking-tighter italic leading-none">SPANCERSKI</h1>
-            <p className="text-[#39ff14] font-['Space_Grotesk'] tracking-[0.4em] text-xs mt-2 uppercase">Optimization Hub</p>
-          </div>
+    <div style={{ minHeight: '100vh', background: '#0c0e12', color: '#e2e2e8', padding: '40px 24px' }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
 
-          <div className="flex gap-3 w-full md:w-auto">
-            <Link 
-              href="/pro" 
-              className="bg-[#39ff14] text-black px-8 py-4 rounded-full font-bold text-sm hover:scale-105 transition-all shadow-[0_0_25px_rgba(57,255,20,0.3)] flex-1 md:flex-none text-center"
-            >
+        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '32px', marginBottom: '48px', flexWrap: 'wrap', gap: '24px' }}>
+          <div>
+            <h1 style={{ fontSize: '3.5rem', fontWeight: 900, letterSpacing: '-2px', fontStyle: 'italic', margin: 0 }}>SPANCERSKI</h1>
+            <p style={{ color: '#39ff14', letterSpacing: '4px', fontSize: '0.7rem', textTransform: 'uppercase', marginTop: '8px' }}>Optimization Hub</p>
+          </div>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Link href="/pro" style={{ background: '#39ff14', color: '#000', padding: '12px 28px', borderRadius: '999px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
               PROFISSIONAL
             </Link>
-            <Link 
-              href="/dashboard" 
-              className="bg-white/10 hover:bg-white/20 border border-white/30 text-white px-8 py-4 rounded-full font-bold text-sm hover:scale-105 transition-all flex-1 md:flex-none text-center"
-            >
+            <Link href="/dashboard" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.3)', color: '#fff', padding: '12px 28px', borderRadius: '999px', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
               CLIENTE
             </Link>
           </div>
         </header>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="glass-card p-8 md:p-10 rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-3xl">
-            <span className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase">Total Clientes</span>
-            <div className="text-7xl font-bold mt-4 tracking-tighter">{clientes}</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
+          <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '40px' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#888', letterSpacing: '3px', textTransform: 'uppercase' }}>Total Clientes</span>
+            <div style={{ fontSize: '5rem', fontWeight: 700, marginTop: '16px', letterSpacing: '-3px' }}>{clientes}</div>
           </div>
 
-          <div className="glass-card p-8 md:p-10 rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-3xl">
-            <span className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase">Protocolos</span>
-            <div className="text-7xl font-bold mt-4 tracking-tighter">{dietas}</div>
+          <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '40px' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#888', letterSpacing: '3px', textTransform: 'uppercase' }}>Protocolos</span>
+            <div style={{ fontSize: '5rem', fontWeight: 700, marginTop: '16px', letterSpacing: '-3px' }}>{dietas}</div>
           </div>
 
-          <div className="glass-card p-8 md:p-10 rounded-[32px] border border-[#39ff14]/20 bg-[#39ff14]/5 backdrop-blur-3xl relative overflow-hidden">
-            <span className="text-[10px] font-bold text-[#39ff14] tracking-[0.2em] uppercase">Status IA</span>
-            <div className="text-3xl font-bold mt-6 text-white italic">SISTEMA ATIVO</div>
+          <div style={{ background: 'rgba(57,255,20,0.05)', border: '1px solid rgba(57,255,20,0.2)', borderRadius: '24px', padding: '40px' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#39ff14', letterSpacing: '3px', textTransform: 'uppercase' }}>Status IA</span>
+            <div style={{ fontSize: '1.8rem', fontWeight: 700, marginTop: '24px', fontStyle: 'italic' }}>SISTEMA ATIVO</div>
           </div>
         </div>
+
       </div>
     </div>
   )

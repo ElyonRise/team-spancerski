@@ -74,6 +74,15 @@ export default function LoginPage() {
             textTransform: 'uppercase',
           }}>Professional Portal</p>
         </div>
+           
+         <div style={{ display: 'flex', borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(57,255,20,0.3)', marginBottom: '24px' }}>
+          <button type="button" style={{ flex: 1, padding: '10px', fontWeight: 700, letterSpacing: '2px', fontSize: '0.75rem', background: '#39ff14', color: '#000', border: 'none', cursor: 'pointer' }}>
+            PROFISSIONAL
+          </button>
+          <button type="button" style={{ flex: 1, padding: '10px', fontWeight: 700, letterSpacing: '2px', fontSize: '0.75rem', background: 'transparent', color: '#39ff14', border: 'none', cursor: 'pointer' }}>
+            CLIENTE
+          </button>
+        </div>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
