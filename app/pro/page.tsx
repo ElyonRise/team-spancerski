@@ -15,9 +15,14 @@ export default async function ProDashboard() {
             <h1 className="text-6xl font-black tracking-tighter italic leading-none">SPANCERSKI</h1>
             <p className="text-[#39ff14] font-['Space_Grotesk'] tracking-[0.4em] text-[10px] mt-2 uppercase">Optimization Hub</p>
           </div>
-          <Link href="/pro/novo-cliente" className="bg-[#39ff14] text-black px-8 py-4 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-[0_0_25px_rgba(57,255,20,0.3)]">
-            + NOVO ATLETA
-          </Link>
+          <div className="flex gap-4">
+            <Link href="/pro" className="bg-[#39ff14] text-black px-6 py-3 rounded-full font-bold text-sm hover:scale-105 transition-transform">
+              PROFISSIONAL
+            </Link>
+            <Link href="/dashboard" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3 rounded-full font-bold text-sm hover:scale-105 transition-transform">
+              CLIENTE
+            </Link>
+          </div>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -32,7 +37,6 @@ export default async function ProDashboard() {
           <div className="glass-card p-10 rounded-[32px] border border-[#39ff14]/20 bg-[#39ff14]/5 backdrop-blur-3xl relative overflow-hidden">
             <span className="text-[10px] font-bold text-[#39ff14] tracking-[0.2em] uppercase">Status IA</span>
             <div className="text-3xl font-bold mt-4 text-white italic">SISTEMA ATIVO</div>
-            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-[#39ff14]/10 blur-3xl rounded-full"></div>
           </div>
         </div>
       </div>

@@ -78,24 +78,23 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>E-mail</label>
-            <input
-              type="email"
-              required
-              placeholder="seu@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+           <input
+  type="email"
+  required
+  placeholder="seu@email.com"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  autoComplete="off"
+/>
 
-          <div className="form-group">
-            <label>Senha</label>
-            <input
-              type="password"
-              required
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+<input
+  type="password"
+  required
+  placeholder="••••••••"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  autoComplete="new-password"
+/>
           </div>
 
           {error && (
