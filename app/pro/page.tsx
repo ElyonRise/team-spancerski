@@ -37,6 +37,11 @@ export default async function ProDashboard() {
             <div style={{ fontSize: '5rem', fontWeight: 700, marginTop: '16px', letterSpacing: '-3px' }}>{dietas}</div>
           </div>
 
+          <Link href="/pro/anamneses" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '40px', textDecoration: 'none', color: 'inherit', display: 'block' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#888', letterSpacing: '3px', textTransform: 'uppercase' }}>Anamneses</span>
+            <div style={{ fontSize: '1.8rem', fontWeight: 700, marginTop: '24px', fontStyle: 'italic' }}>ABRIR →</div>
+          </Link>
+
           <div style={{ background: 'rgba(57,255,20,0.05)', border: '1px solid rgba(57,255,20,0.2)', borderRadius: '24px', padding: '40px' }}>
             <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#39ff14', letterSpacing: '3px', textTransform: 'uppercase' }}>Status IA</span>
             <div style={{ fontSize: '1.8rem', fontWeight: 700, marginTop: '24px', fontStyle: 'italic' }}>SISTEMA ATIVO</div>

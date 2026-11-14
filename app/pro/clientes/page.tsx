@@ -47,6 +47,7 @@ export default function ClientesPage() {
                     <td>
                       <div style={{ display: 'flex', gap: 6 }}>
                         <Link href={`/pro/enviar-dieta?client=${c.id}`} className="btn btn-outline btn-sm">Dieta</Link>
+                        <Link href={`/pro/anamneses?client=${c.id}`} className="btn btn-outline btn-sm">Anamnese</Link>
                         <button onClick={() => remover(c.id, c.name)} className="btn btn-danger btn-sm">Remover</button>
                       </div>
                     </td>

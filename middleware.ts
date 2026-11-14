@@ -6,7 +6,11 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Rotas públicas
-  if (pathname === '/' || pathname.startsWith('/login') || pathname.startsWith('/api/auth')) {
+  // /anamnese/<token> e /api/anamnese/public/<token> são abertos ao aluno (acesso por token único)
+  if (
+    pathname === '/' || pathname.startsWith('/login') || pathname.startsWith('/api/auth') ||
+    pathname.startsWith('/anamnese/') || pathname.startsWith('/api/anamnese/public/')
+  ) {
     return NextResponse.next()
   }
 
