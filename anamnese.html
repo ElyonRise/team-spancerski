@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anamnese — Team Spancerski</title>
+  <link rel="icon" href="logo-transparente.png" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body{background:var(--ink);color:var(--text);font-family:var(--font-body);margin:0}
+    .an{max-width:720px;margin:0 auto;padding:28px 18px 80px}
+    .an-top{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+    .an-top img{width:64px;height:64px;border-radius:50%;background:#000}
+    .an h1{font-family:var(--font-display);font-size:28px;margin:0;line-height:1.15}
+    .an-intro{color:var(--text-muted);margin:6px 0 26px}
+    .an fieldset{border:0;padding:0;margin:0 0 34px;min-width:0}
+    .an fieldset[disabled]{display:none}
+    .an legend{font-family:var(--font-display);font-size:19px;color:var(--accent);padding:0 0 12px;margin-bottom:6px;border-bottom:1px solid var(--border);width:100%}
+    .campo{margin:18px 0}
+    .campo>label{display:block;font-weight:600;margin-bottom:8px}
+    .campo em{font-weight:400;color:var(--text-muted);font-size:13px}
+    .an input[type=text],.an input[type=number],.an input[type=tel],.an input[type=email],.an input[type=date],.an input[type=time],.an textarea{width:100%;box-sizing:border-box;background:var(--surface-solid);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 12px;font:inherit}
+    .an input:focus,.an textarea:focus{outline:2px solid var(--accent);border-color:transparent}
+    .an input[readonly]{opacity:.6}
+    .op{display:flex;flex-wrap:wrap;gap:8px}
+    .op label{cursor:pointer}
+    .op input{position:absolute;opacity:0;pointer-events:none}
+    .op span{display:block;padding:9px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-solid)}
+    .op input:checked+span{border-color:var(--accent);background:var(--accent-dim);color:var(--accent)}
+    .op input:focus-visible+span{outline:2px solid var(--logo-purple)}
+    .op.esc span{padding:9px 0;width:40px;text-align:center}
+    .k{display:flex;gap:10px;align-items:flex-start;margin:12px 0;cursor:pointer;line-height:1.4}
+    .k input{margin-top:3px;accent-color:var(--accent)}
+    .fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+    .foto{border:1px dashed var(--border);border-radius:var(--radius);aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;background:var(--surface-solid) center/cover no-repeat;text-align:center;font-size:14px;color:var(--text-muted)}
+    .foto.ok{border-style:solid;border-color:var(--accent);color:#fff;text-shadow:0 1px 3px #000}
+    .foto input{display:none}
+    .aviso{background:var(--logo-purple-dim);border:1px solid var(--logo-purple);border-radius:var(--radius-sm);padding:12px 14px;margin:12px 0;font-size:14px}
+    .enviar{width:100%;padding:15px;border:0;border-radius:var(--radius-pill);background:var(--accent);color:var(--ink);font:700 16px var(--font-display);cursor:pointer}
+    .enviar:disabled{opacity:.5;cursor:wait}
+    .erro{color:var(--danger);margin:12px 0;font-weight:600}
+    .hp{position:absolute;left:-9999px}
+    .ok-tela{text-align:center;padding:60px 10px}
+    .ok-tela h1{color:var(--accent)}
+  </style>
+</head>
+<body>
+  <div class="an" id="an">
+    <div class="an-top"><img src="logo-transparente.png" alt="Team Spancerski" /><h1>Anamnese completa</h1></div>
+    <p class="an-intro">Bem-vindo(a) ao Team Spancerski! Responda com sinceridade. As informações serão usadas para orientar seu acompanhamento e planejamento de treinamento.</p>
+    <form id="form" novalidate></form>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="config.js"></script>
+  <script src="anamnese.js"></script>
+</body>
+</html>

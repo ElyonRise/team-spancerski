@@ -187,5 +187,5 @@
   window.importarEDB=async x=>{try{await trainer.importarExercicioExerciseDBGratis(x);toast('Exercício importado.');renderCatalogo();}catch(e){toast(e.message,true)}};
   async function renderCatalogo(){const box=$('catalogoSalvo');if(!box)return;try{const xs=await trainer.carregarCatalogoExercicios();box.innerHTML=xs.slice(0,24).map(x=>`<div class="card-importacao"><div class="info-importacao"><strong>${esc(x.nome)}</strong><p class="sp-muted">${esc(x.grupoMuscular||'')}</p>${x.gifUrl?`<img src="${esc(x.gifUrl)}" alt="">`:''}</div></div>`).join('')||'<p class="sp-muted">Catálogo vazio.</p>';}catch(e){box.innerHTML='<p class="sp-muted">'+esc(e.message)+'</p>';}}
 
-  document.addEventListener('DOMContentLoaded',()=>{carregar();});
+  document.addEventListener('DOMContentLoaded',()=>{(window.__authPronto||Promise.resolve()).then(()=>carregar());});
 })();

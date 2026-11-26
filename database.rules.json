@@ -1,0 +1,81 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "alunos": {
+      ".read": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      ".write": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      "$id": {
+        ".read": true
+      }
+    },
+    "protocolos": {
+      ".read": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      ".write": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      "$id": {
+        ".read": true
+      }
+    },
+    "mesociclos": {
+      ".read": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      ".write": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      "$id": {
+        ".read": true
+      }
+    },
+    "dietas": {
+      ".read": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      ".write": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      "$id": {
+        ".read": true
+      }
+    },
+    "avaliacoes": {
+      ".read": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      ".write": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      "$id": {
+        ".read": true
+      }
+    },
+    "financeiro": {
+      ".read": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      ".write": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true"
+    },
+    "execucoes": {
+      ".read": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      ".write": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true"
+    },
+    "catalogoExercicios": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true"
+    },
+    "anamneses": {
+      ".read": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      "$id": {
+        ".write": "(!data.exists() && newData.exists() && $id.matches(/^an_[A-Za-z0-9_]+$/)) || (auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true)",
+        ".validate": "newData.hasChildren(['nome','criadoEm','respostas']) && newData.child('nome').isString() && newData.child('nome').val().length < 200 && newData.child('respostas').hasChildren()"
+      }
+    },
+    "anamnesesFotos": {
+      ".read": "auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true",
+      "$id": {
+        ".write": "(!data.exists() && newData.exists() && $id.matches(/^an_[A-Za-z0-9_]+$/)) || (auth != null && auth.token.email == 'SEU_EMAIL_GOOGLE@gmail.com' && auth.token.email_verified == true)",
+        "frente": {
+          ".validate": "newData.isString() && newData.val().length < 1500000 && newData.val().matches(/^data:image\\/jpeg;base64,/)"
+        },
+        "costas": {
+          ".validate": "newData.isString() && newData.val().length < 1500000 && newData.val().matches(/^data:image\\/jpeg;base64,/)"
+        },
+        "lateralEsquerda": {
+          ".validate": "newData.isString() && newData.val().length < 1500000 && newData.val().matches(/^data:image\\/jpeg;base64,/)"
+        },
+        "lateralDireita": {
+          ".validate": "newData.isString() && newData.val().length < 1500000 && newData.val().matches(/^data:image\\/jpeg;base64,/)"
+        },
+        "$outro": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}
