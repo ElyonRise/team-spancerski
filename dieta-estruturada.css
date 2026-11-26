@@ -1,0 +1,29 @@
+.dp-head h3{margin:0 0 8px}.dp-info span{display:inline-block;background:#1c1c1c;border-radius:999px;padding:4px 10px;margin:0 6px 6px 0;font-size:12px}
+.dp-meal{background:#141414;border:1px solid #2a2a2a;border-radius:14px;padding:14px;margin:12px 0}
+.dp-meal-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dp-hora{background:#e11d2e;color:#fff;border-radius:8px;padding:4px 10px;font-weight:700}
+.dp-meal-head h4{margin:0}
+.dp-opcoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.dp-opcao{background:#1b1b1b;border-radius:10px;padding:10px}
+.dp-opcao h5{margin:0 0 6px}.dp-grupo{font-size:12px;opacity:.7;margin-top:6px;text-transform:uppercase}
+.dp-opcao ul,.dp-simples{list-style:none;margin:0;padding:0}
+.dp-opcao li{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid #262626}
+.dp-opcao li b{white-space:nowrap}.dp-opcao em{opacity:.6;font-size:12px}
+.dp-nota{font-size:13px;opacity:.75;margin:8px 0 0}
+.dp-extra{margin-top:16px}.dp-simples li{padding:4px 0}
+.dl-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.dl-cat h4{margin:16px 0 6px}.dl-cat ul{list-style:none;padding:0;margin:0}
+.dl-cat label{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #262626}
+.dl-qtd{margin-left:auto;font-weight:700}.dl-cat li.feito .dl-nome,.dl-cat li.feito .dl-qtd{text-decoration:line-through;opacity:.45}
+.sp-muted{font-size:12px;opacity:.65}
+.btn-acao{background:#e11d2e;color:#fff;border:0;border-radius:8px;padding:8px 12px;font-weight:600;cursor:pointer;text-decoration:none;font-size:14px}
+.sem-treino{padding:14px;opacity:.7}
+.dp-tabs{display:flex;gap:8px;margin:0 0 12px}
+.dp-tab{flex:1;background:#1b1b1b;color:#fff;border:1px solid #2a2a2a;border-radius:10px;padding:10px;font-weight:700;cursor:pointer}
+.dp-tab.on{background:#e11d2e;border-color:#e11d2e}
+.dp-wrap{max-width:900px;margin:16px auto;padding:0 12px;color:#fff}
+#dpFab{position:fixed;right:16px;bottom:16px;z-index:9998;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+#dpModal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:none;overflow:auto}
+#dpModal .dp-box{background:#0f0f0f;color:#fff;max-width:900px;margin:20px auto;padding:16px;border-radius:14px;border:1px solid #2a2a2a}
+#dpModal select,#dpModal input[type=file]{width:100%;margin:6px 0 10px;padding:8px;background:#1b1b1b;color:#fff;border:1px solid #333;border-radius:8px}
+#dpModal .dp-linha{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
