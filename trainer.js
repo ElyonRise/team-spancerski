@@ -457,7 +457,7 @@ class GerenciadorTreinador {
 
     // Protocolo de treino
     tituloSecao('Protocolo de treino');
-    const diasProtocolo = protocolo ? Object.keys(protocolo).filter(k => k !== 'dataAtualizacao') : [];
+    const diasProtocolo = protocolo ? Object.keys(protocolo).filter(k => k !== 'dataAtualizacao').sort((a,b)=>{const f=k=>{const i=['segunda','terca','quarta','quinta','sexta','sabado','domingo'].indexOf(String(k).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/-feira$/,''));return i<0?99:i};return f(a)-f(b)}) : [];
     if (diasProtocolo.length) {
       diasProtocolo.forEach(dia => {
         linha('• ' + dia + ':');
@@ -696,7 +696,7 @@ class GerenciadorTreinador {
 
       const semanas = percentuaisPorSemana.map((percentual, indice) => {
         const dias = {};
-        Object.keys(protocolo || {}).forEach(dia => {
+        Object.keys(protocolo || {}).sort((a,b)=>{const f=k=>{const i=['segunda','terca','quarta','quinta','sexta','sabado','domingo'].indexOf(String(k).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/-feira$/,''));return i<0?99:i};return f(a)-f(b)}).forEach(dia => {
           const exercicios = (protocolo[dia] && protocolo[dia].exercicios) || [];
           dias[dia] = exercicios
             .filter(ex => ex.carga)
