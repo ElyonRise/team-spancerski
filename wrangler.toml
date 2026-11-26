@@ -5,4 +5,4 @@ compatibility_date = "2026-09-08"
 [ai]
 binding = "AI"
 [vars]
-ALLOWED_ORIGINS = "https://elyonrisev1.github.io"
+ALLOWED_ORIGINS = "https://elyonrise.github.io"
