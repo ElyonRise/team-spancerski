@@ -64,8 +64,11 @@
       try {
         await db().ref('dietas/' + id + '/estruturada').set(est);
         const base = location.href.replace(/[^\/]*$/, '');
-        st('Salvo! Link do aluno: ' + base + 'aluno.html?aluno=' + id);
-      } catch (err) { st('Erro ao salvar: ' + err.message); }
+        const chk = (await db().ref('dietas/' + id + '/estruturada/titulo').once('value')).val();
+        const link = base + 'aluno.html?aluno=' + id;
+        st('Salvo! Link do aluno: ' + link);
+        alert(chk ? 'SALVO! Link do aluno:\n' + link : 'Gravou, mas nao consegui confirmar a leitura. Abra o link e confira.');
+      } catch (err) { st('Erro ao salvar: ' + err.message); alert('ERRO ao salvar: ' + (err.code || '') + ' ' + err.message); }
     };
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar); else montar();
