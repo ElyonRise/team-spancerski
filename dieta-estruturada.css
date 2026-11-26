@@ -27,3 +27,32 @@
 #dpModal .dp-box{background:#0f0f0f;color:#fff;max-width:900px;margin:20px auto;padding:16px;border-radius:14px;border:1px solid #2a2a2a}
 #dpModal select,#dpModal input[type=file]{width:100%;margin:6px 0 10px;padding:8px;background:#1b1b1b;color:#fff;border:1px solid #333;border-radius:8px}
 #dpModal .dp-linha{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}#dpSalvar:disabled{opacity:.4;cursor:not-allowed}
+
+/* v2: concluir refeicao */
+.dp-meal-head .dp-ok{margin-left:auto;background:#1b1b1b;color:#fff;border:1px solid #333;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer}
+.dp-meal.feito{opacity:.6;border-color:#16a34a}
+.dp-meal.feito .dp-hora{background:#16a34a}
+.dp-meal.feito .dp-ok{background:#16a34a;border-color:#16a34a}
+.dp-prog{margin:0 0 14px}
+.dp-prog-txt{font-size:13px;opacity:.8;margin-bottom:6px}
+.dp-prog-bar{height:8px;background:#222;border-radius:999px;overflow:hidden}
+.dp-prog-bar i{display:block;height:100%;background:#16a34a}
+/* v2: lista de compras mais separada */
+.dl-cat{background:#141414;border:1px solid #2a2a2a;border-radius:14px;padding:6px 14px 10px;margin:18px 0}
+.dl-cat h4{margin:10px 0 8px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#e11d2e}
+.dl-cat label{padding:13px 0}
+.dl-cat li:last-child label{border-bottom:0}
+.dl-nome,.dl-qtd{font-size:15px}
+.dl-qtd{white-space:nowrap}
+/* v2: series e temporizador */
+.tr-series{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0 4px}
+.tr-lbl{font-size:12px;opacity:.7;width:100%}
+.tr-s{width:42px;height:42px;border-radius:50%;border:2px solid #444;background:transparent;color:#fff;font-weight:700;font-size:15px;cursor:pointer}
+.tr-s.on{background:#16a34a;border-color:#16a34a}
+#trBar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);width:min(92vw,420px);z-index:10000;display:none;align-items:center;justify-content:space-between;gap:10px;background:#111;color:#fff;border:2px solid #e11d2e;border-radius:14px;padding:10px 14px;box-shadow:0 6px 20px rgba(0,0,0,.6)}
+#trBar .tr-t{display:flex;align-items:center;gap:10px;font-size:22px}
+#trBar .tr-n{font-size:12px;opacity:.75}
+#trBar .tr-c{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+#trBar .tr-b{display:flex;gap:6px}
+#trBar button{background:#e11d2e;color:#fff;border:0;border-radius:8px;padding:8px 10px;font-weight:700;cursor:pointer}
+#trBar #trPula{background:#333}
