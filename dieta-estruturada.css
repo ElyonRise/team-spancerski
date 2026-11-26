@@ -26,4 +26,4 @@
 #dpModal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:none;overflow:auto}
 #dpModal .dp-box{background:#0f0f0f;color:#fff;max-width:900px;margin:20px auto;padding:16px;border-radius:14px;border:1px solid #2a2a2a}
 #dpModal select,#dpModal input[type=file]{width:100%;margin:6px 0 10px;padding:8px;background:#1b1b1b;color:#fff;border:1px solid #333;border-radius:8px}
-#dpModal .dp-linha{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#dpModal .dp-linha{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}#dpSalvar:disabled{opacity:.4;cursor:not-allowed}

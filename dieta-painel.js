@@ -28,7 +28,7 @@
     const $ = s => modal.querySelector(s), st = t => $('#dpStatus').textContent = t;
 
     fab.onclick = async () => {
-      modal.style.display = 'block'; est = null; $('#dpPrev').innerHTML = ''; $('#dpSalvar').disabled = true; st('');
+      modal.style.display = 'block'; $('#dpArq').value = ''; est = null; $('#dpPrev').innerHTML = ''; $('#dpSalvar').disabled = true; st('');
       try {
         const v = (await db().ref('alunos').once('value')).val() || {};
         const ops = Object.keys(v).map(id => ({ id, nome: (v[id] && (v[id].nome || v[id].name)) || id }))
@@ -37,6 +37,7 @@
       } catch (e) { st('Erro ao listar alunos: ' + e.message); }
     };
     $('#dpFechar').onclick = () => modal.style.display = 'none';
+    $('#dpArq').onclick = e => { e.target.value = ''; };
 
     $('#dpArq').onchange = async e => {
       const f = e.target.files[0]; if (!f) return;
@@ -59,7 +60,7 @@
     $('#dpSalvar').onclick = async () => {
       const id = $('#dpAluno').value;
       if (!id) { st('Escolha o aluno.'); return; }
-      if (!est) return;
+      if (!est) { st('Escolha o arquivo da dieta e aguarde a prévia antes de salvar.'); return; }
       try {
         await db().ref('dietas/' + id + '/estruturada').set(est);
         const base = location.href.replace(/[^\/]*$/, '');
