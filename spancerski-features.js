@@ -379,7 +379,7 @@
       html: sanitizeHtml(html)
     };
 
-    await T.db.ref('dietas/' + alunoId).set(registro);
+    await T.db.ref('dietas/' + alunoId).update(registro);
     return registro;
   };
 
